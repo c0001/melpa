@@ -29,7 +29,9 @@
 ;;; Code:
 
 (require 'eieio)
-
+(defvar package-build-local-remote
+  (expand-file-name "../../../../.git/modules/elements/submodules/upstream"
+                    (file-name-directory load-file-name)))
 (defvar package-build-recipes-dir)
 (defvar package-build-working-dir)
 
@@ -68,8 +70,8 @@
 [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}\\( [+-][0-9]\\{4\\}\\)?\\)")))
 
 (defclass package-github-recipe (package-git-recipe)
-  ((url-format      :initform "https://github.com/%s.git")
-   (repopage-format :initform "https://github.com/%s")))
+  ((url-format      :initform (concat package-build-local-remote "/%s"))
+   (repopage-format :initform (concat package-build-local-remote "/%s"))))
 
 (defclass package-gitlab-recipe (package-git-recipe)
   ((url-format      :initform "https://gitlab.com/%s.git")

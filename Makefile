@@ -37,6 +37,9 @@ TIMEOUT := $(shell which timeout && echo "-k 60 600")
 
 all: packages packages/archive-contents json index
 
+local-recipe:
+	@cd $(RCPDIR) && find . -type f -exec sed -i -E -e 's/:repo "[^: ]*\/([^:\/ ]+?)"/:repo "\1"/g' {} \;
+
 ## General rules
 html: index
 index: json

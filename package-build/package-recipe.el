@@ -74,8 +74,8 @@
    (repopage-format :initform (concat package-build-local-remote "/%s"))))
 
 (defclass package-gitlab-recipe (package-git-recipe)
-  ((url-format      :initform "https://gitlab.com/%s.git")
-   (repopage-format :initform "https://gitlab.com/%s")))
+  ((url-format      :initform (concat package-build-local-remote "/%s"))
+   (repopage-format :initform (concat package-build-local-remote "/%s"))))
 
 ;;;; Mercurial
 
@@ -85,8 +85,8 @@
 [0-9]\\{2\\}:[0-9]\\{2\\}\\( [+-][0-9]\\{4\\}\\)?\\)")))
 
 (defclass package-bitbucket-recipe (package-hg-recipe)
-  ((url-format      :initform "https://bitbucket.org/%s")
-   (repopage-format :initform "https://bitbucket.org/%s")))
+  ((url-format      :initform (concat package-build-local-remote "/%s"))
+   (repopage-format :initform (concat package-build-local-remote "/%s"))))
 
 ;;; Interface
 

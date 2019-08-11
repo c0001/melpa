@@ -110,9 +110,9 @@ $(RCPDIR)/.dirstamp: .FORCE
 
 ## Recipe rules
 $(RCPDIR)/%: .FORCE
-	@echo " • Building package $(@F) ..."
-	@- $(TIMEOUT) $(EVAL) "(package-build-archive \"$(@F)\")" \
-	&& echo " ✓ Success:" \
+	@echo -e "\e[34m • Building package $(@F) ... \e[0m"
+	@$(TIMEOUT) $(EVAL) "(package-build-archive \"$(@F)\")" \
+	&& echo -e " \e[32m✓ Success:\e[0m" \
 	&& ls -lsh $(PKGDIR)/$(@F)-*
 	@test $(SLEEP) -gt 0 && echo " Sleeping $(SLEEP) seconds ..." && sleep $(SLEEP) || true
 	@echo

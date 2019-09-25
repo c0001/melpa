@@ -36,9 +36,6 @@
 (defvar package-build-local-upstream-remote
   (expand-file-name "upstream" package-build-local-host))
 
-(defvar package-build-local-eemacs-remote
-  (expand-file-name "eemacs-packages" package-build-local-host))
-
 (defvar package-build-recipes-dir)
 (defvar package-build-working-dir)
 
@@ -83,10 +80,6 @@
 (defclass package-gitlab-recipe (package-git-recipe)
   ((url-format      :initform (concat package-build-local-upstream-remote "/%s"))
    (repopage-format :initform (concat package-build-local-upstream-remote "/%s"))))
-
-(defclass package-eemacs-recipe (package-git-recipe)
-  ((url-format      :initform (concat package-build-local-eemacs-remote "/%s"))
-   (repopage-format :initform (concat package-build-local-eemacs-remote "/%s"))))
 
 ;;;; Mercurial
 
@@ -151,7 +144,7 @@ file is invalid, then raise an error."
           (cl-assert (memq thing all-keys) nil "Unknown keyword %S" thing)))
       (let ((fetcher (plist-get plist :fetcher)))
         (cl-assert fetcher nil ":fetcher is missing")
-        (if (memq fetcher '(github gitlab bitbucket eemacs))
+        (if (memq fetcher '(github gitlab bitbucket))
             (progn
               (cl-assert (plist-get plist :repo) ":repo is missing")
               (cl-assert (not (plist-get plist :url)) ":url is redundant"))

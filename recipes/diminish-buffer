@@ -1,0 +1,1 @@
+(diminish-buffer :repo "elpa-host/diminish-buffer" :fetcher github)

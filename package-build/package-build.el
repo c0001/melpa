@@ -272,15 +272,19 @@ is used instead."
 
 (defmethod package-build--checkout-1 ((rcp package-git-recipe) &optional rev)
   (let ((dir (package-recipe--working-tree rcp)))
-    (unless rev
-      (setq rev (or (oref rcp commit)
-                    (concat "origin/"
-                            (or (oref rcp branch)
-                                (ignore-errors
-                                  (package-build--run-process-match
-                                   "HEAD branch: \\(.*\\)" dir
-                                   "git" "remote" "show" "origin"))
-                                "master")))))
+
+    ;; Commented the branch reset behaviour for reset to origin/master
+    ;; that eemacs-ext checkout the commit required before melpa init.
+    
+    ;; (unless rev
+    ;;   (setq rev (or (oref rcp commit)
+    ;;                 (concat "origin/"
+    ;;                         (or (oref rcp branch)
+    ;;                             (ignore-errors
+    ;;                               (package-build--run-process-match
+    ;;                                "HEAD branch: \\(.*\\)" dir
+    ;;                                "git" "remote" "show" "origin"))
+    ;;                             "master")))))
     (package-build--run-process dir nil "git" "reset" "--hard" rev)
     (package-build--run-process dir nil "git" "submodule" "sync" "--recursive")
     (package-build--run-process dir nil "git" "submodule" "update"

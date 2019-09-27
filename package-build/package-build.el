@@ -285,7 +285,7 @@ is used instead."
     ;;                                "HEAD branch: \\(.*\\)" dir
     ;;                                "git" "remote" "show" "origin"))
     ;;                             "master")))))
-    (package-build--run-process dir nil "git" "reset" "--hard" rev)
+    (package-build--run-process dir nil "git" "reset" "--hard")
     (package-build--run-process dir nil "git" "submodule" "sync" "--recursive")
     (package-build--run-process dir nil "git" "submodule" "update"
                                 "--init" "--recursive")))

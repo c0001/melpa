@@ -250,7 +250,8 @@ is used instead."
      ((and (file-exists-p (expand-file-name ".git" dir))
            (string-equal (package-build--used-url rcp) url))
       (package-build--message "Updating %s" dir)
-      (package-build--run-process dir nil "git" "fetch" "-f" "--all" "--tags"))
+      ;; (package-build--run-process dir nil "git" "fetch" "-f" "--all" "--tags")
+      )
      (t
       (when (file-exists-p dir)
         (delete-directory dir t))
@@ -277,7 +278,7 @@ is used instead."
 
     ;; Commented the branch reset behaviour for reset to origin/master
     ;; that eemacs-ext checkout the commit required before melpa init.
-    
+
     ;; (unless rev
     ;;   (setq rev (or (oref rcp commit)
     ;;                 (concat "origin/"

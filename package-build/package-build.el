@@ -288,9 +288,10 @@ is used instead."
     ;;                                "git" "remote" "show" "origin"))
     ;;                             "master")))))
     (package-build--run-process dir nil "git" "reset" "--hard")
-    (package-build--run-process dir nil "git" "submodule" "sync" "--recursive")
-    (package-build--run-process dir nil "git" "submodule" "update"
-                                "--init" "--recursive")))
+    ;; (package-build--run-process dir nil "git" "submodule" "sync" "--recursive")
+    ;; (package-build--run-process dir nil "git" "submodule" "update"
+    ;;                             "--init" "--recursive")
+    ))
 
 (defmethod package-build--used-url ((rcp package-git-recipe))
   (let ((default-directory (package-recipe--working-tree rcp)))

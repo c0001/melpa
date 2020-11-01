@@ -39,7 +39,7 @@
 
   melpa.Package = function(data) {
     ["name", "description", "version", "dependencies", "source", "commit",
-     "downloads", "fetcher", "recipeURL", "packageURL", "sourceURL", "oldNames"].map(function(p) {
+     "downloads", "fetcher", "recipeURL", "packageURL", "homeURL", "sourceURL", "oldNames"].map(function(p) {
       this[p] = data[p];
     }.bind(this));
     this._searchText = _([data.name, data.description, data.version].concat(data.searchExtra || []))
@@ -153,6 +153,8 @@
       });
       var oldNames = recipe['old-names'] || [];
       var commit = props.commit;
+      var sourceURL = calculateSourceURL(name, recipe, commit);
+      var homeURL = props.url || calculateSourceURL(name, recipe, null);
 
       pkgs.push(new melpa.Package({
         name: name,
@@ -165,7 +167,8 @@
         fetcher: recipe.fetcher,
         recipeURL: "https://github.com/melpa/melpa/blob/master/recipes/" + name,
         packageURL: "packages/" + name + "-" + version + "." + (built.type == "single" ? "el" : "tar"),
-        sourceURL: calculateSourceURL(name, recipe, commit),
+        homeURL: homeURL,
+        sourceURL: sourceURL,
         oldNames: oldNames,
         searchExtra: [recipe.repo]
       }));
@@ -209,7 +212,7 @@
       }
     };
     this.maxPage = function() {
-      return Math.floor(getItemList().length / this.pageLength());
+      return Math.ceil(getItemList().length / this.pageLength());
     };
     this.prevPages = function() {
       return _.last(_.range(1, this.pageNumber()),
@@ -420,7 +423,8 @@
       m("p", [
         m("a.btn.btn-default", {href: pkg.recipeURL}, [glyphicon('cutlery'), " Recipe"]), ' ',
         m("a.btn.btn-default", {href: pkg.packageURL}, [glyphicon('download'), " Download"]), ' ',
-        (pkg.sourceURL ? m("a.btn.btn-default", {href: pkg.sourceURL}, [glyphicon('home'), " Homepage"]) : '')
+        (pkg.sourceURL ? m("a.btn.btn-default", {href: pkg.sourceURL}, [glyphicon('folder-open'), " Source code"]) : ''), ' ',
+        (pkg.homeURL ? m("a.btn.btn-default", {href: pkg.homeURL}, [glyphicon('home'), " Homepage"]) : '')
       ]),
       m("section", [
         m(".well", [
@@ -500,7 +504,9 @@
       return t ? moment(t).fromNow() : "unknown";
     }
     function duration() {
-      return ctrl.duration() ? moment.duration(ctrl.duration(), 'seconds').humanize() : "unknown";
+      return ctrl.duration() ?
+        moment.duration(ctrl.duration(), 'seconds').humanize() :
+        "an unknown amount of time";
     }
     if (ctrl.running()) {
       return m(".alert.alert-warning", [
@@ -606,7 +612,7 @@
               "<strong>Curated</strong> - no obsolete, renamed, forked or randomly hacked packages",
               "<strong>Comprehensive</strong> - more packages than any other archive",
               "<strong>Automatic updates</strong> - new commits result in new packages",
-              "<strong>Extensible</strong> - contribute recipes via github, and we'll build the packages"
+              "<strong>Extensible</strong> - contribute new recipes, and we'll build the packages"
             ].map(function(content) { return m("li", m.trust(content)); }))
           ])
         ]),

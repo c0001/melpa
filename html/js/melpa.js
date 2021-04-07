@@ -44,6 +44,7 @@
     }.bind(this));
     this._searchText = _([data.name, data.description, data.version].concat(data.searchExtra || []))
       .compact().valueOf().join(' ').toLowerCase();
+    this.logURL = "/packages/" + data.name + ".log";
     this.readmeURL = "/packages/" + data.name + "-readme.txt";
     this.badgeURL = "/packages/" + data.name + "-badge.svg";
     this.matchesTerm = function(term) {
@@ -382,6 +383,7 @@
       packageName: m.route.param("package"),
       package: m.prop(),
       readme: m.prop('No description available.'),
+      buildLog: m.prop(),
       neededBy: m.prop([]),
       downloadsPercentile: m.prop(0),
       archivename: new melpa.archivename.controller()
@@ -398,6 +400,13 @@
                  url: p.readmeURL,
                  deserialize: _.identity
                 }).then(ctrl.readme);
+      ctrl.fetchBuildLog = function() {
+        ctrl.buildLog("Loading")
+        m.request({method: "GET",
+                   url: p.logURL,
+                   deserialize: _.identity
+                  }).then(ctrl.buildLog);
+      };
     });
     return ctrl;
   };
@@ -471,7 +480,11 @@
             m("dt", "Org"),
             m("dd", m("pre", '[[' + fullURL + '][file:' + badgeURL + ']]'))
           ])
-        ]))
+        ])),
+      m("section", [
+        m("h4", "Build log"),
+        (ctrl.buildLog() ?  m("pre", ctrl.buildLog()) : m("a.btn.btn-default", {onclick: ctrl.fetchBuildLog}, "Show"))
+      ])
     ]);
   };
 
@@ -618,8 +631,6 @@
         ]),
         m(".col-md-4", [
           melpa.buildstatus.view(ctrl.buildstatus),
-          m.trust('<a class="twitter-timeline" data-height="250" data-dnt="true" href="https://twitter.com/melpa_emacs?ref_src=twsrc%5Etfw">Tweets by melpa_emacs</a>'),
-          m('script', {src: "//platform.twitter.com/widgets.js", type: "text/javascript"})
         ])
       ]),
       melpa.packagelist.view(ctrl.packagelist)

@@ -50,6 +50,13 @@
 
 (require 'package-recipe)
 
+;; invoke current el host
+(defvar eemacs-ext-malpa/package-builder-hostdir
+  (file-name-directory
+   (expand-file-name load-file-name)))
+(add-to-list 'load-path
+             eemacs-ext-malpa/package-builder-hostdir)
+
 ;;; Options
 
 (defconst package-build--melpa-base
@@ -276,6 +283,9 @@ is used instead."
         (or (zerop exit-code)
             (error "Command '%s' exited with non-zero status %d: %s"
                    argv exit-code (buffer-string)))))))
+
+;; pactch `package-build--run-process'
+(require 'eemacs-ext-melpa-package-build-patch-1)
 
 ;;; Checkout
 ;;;; Common

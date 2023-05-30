@@ -116,10 +116,10 @@ the following form (`[...]` denotes optional or conditional values),
   provides generic fetcher types for them: `git` and `hg`. When you
   use one of these fetchers, you most specify the `:url` property.
 
-  Melpa also provides dedicate fetchers for certain Git forges (aka
+  Melpa also provides dedicated fetchers for certain Git forges (aka
   "Git repository hosting platforms"), which should always be
   preferred over the generic `git` fetcher. When using a dedicated
-  fetcher, you must specify `:repo`, not `:url`. Currently the these
+  fetcher, you must specify `:repo`, not `:url`. Currently these
   Git forge fetchers exist: [`github`], [`gitlab`], [`codeberg`] and
   [`sourcehut`].
 
@@ -212,7 +212,7 @@ the following form (`[...]` denotes optional or conditional values),
   *library* (as opposed to a file implementing tests) ends with `-test.el`,
   then `:defaults` cannot be used.
 
-  **Warning:** Once the appropiate commit has been determined
+  **Warning:** Once the appropriate commit has been determined
   `file-expand-wildcards` is used to determine the files matched by
   each glob. Unfortunately (unlike in a shell) a glob that begins with
   `*` may also match filenames that begin with `.`, so you might have
@@ -289,7 +289,7 @@ Consider the `flymake-perlcritic` recipe,
 which will result in a package structure of,
 
 ```
-flymake-perlcritic-YYYMMDD
+flymake-perlcritic-YYYYMMDD
 |-- bin
 |   `-- flymake_perlcritic
 |-- flymake-perlcritic-pkg.el
@@ -435,6 +435,13 @@ Only the packages are mirrored, not the web site front-end itself.
 
 _We are NOT responsible for the contents of any UNOFFICIAL mirror of
 our packages._
+
+Use `rsync` to get started with your own mirror:
+
+```
+rsync -avz --delete rsync://melpa.org/packages/ snapshots/
+rsync -avz --delete rsync://melpa.org/packages-stable/ releases/
+```
 
 ## About
 

@@ -27,7 +27,7 @@ LISP_CONFIG ?= '(progn\
   (setq package-build-stable $(STABLE))\
   (setq package-build-write-melpa-badge-images nil)\
   (setq package-build-timeout-secs \
-	(and (string= "linux" (symbol-name system-type)) 600)))'
+        (and (string= "linux" (symbol-name system-type)) 600)))'
 
 LOAD_PATH ?= $(TOP)/package-build
 
@@ -142,18 +142,18 @@ sandbox: packages/archive-contents
 	  --eval '(setq package-user-dir (locate-user-emacs-file "elpa"))' \
 	  -l package \
 	  --eval "(add-to-list 'package-archives \
-		    '(\"gnu\" . \"https://elpa.gnu.org/packages/\") t)" \
+	            '(\"gnu\" . \"https://elpa.gnu.org/packages/\") t)" \
 	  --eval "(add-to-list 'package-archives \
-		    '(\"melpa\" . \"https://melpa.org/packages/\") t)" \
+	            '(\"melpa\" . \"https://melpa.org/packages/\") t)" \
 	  --eval "(add-to-list 'package-archives \
-		    '(\"sandbox\" . \"$(TOP)/$(PKGDIR)/\") t)" \
+	            '(\"sandbox\" . \"$(TOP)/$(PKGDIR)/\") t)" \
 	  --eval "(package-refresh-contents)" \
 	  --eval "(package-initialize)" \
 	  --eval '(setq sandbox-install-package "$(INSTALL)")' \
 	  --eval "(unless (string= \"\" sandbox-install-package) \
-		    (package-install (intern sandbox-install-package)))" \
+	            (package-install (intern sandbox-install-package)))" \
 	  --eval "(when (get-buffer \"*Compile-Log*\") \
-		    (display-buffer \"*Compile-Log*\"))"
+	            (display-buffer \"*Compile-Log*\"))"
 
 local-recipe:
 	@cd $(RCPDIR) && find . -type f -exec \

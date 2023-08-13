@@ -31,7 +31,8 @@ SANDBOX := sandbox
 ifndef MELPA_CHANNEL
 PKGDIR  := packages
 HTMLDIR := html
-CHANNEL_CONFIG := "()"
+CHANNEL_CONFIG := "(progn\
+(setq package-build-badge-data nil))"
 
 else ifeq ($(MELPA_CHANNEL), unstable)
 PKGDIR  := packages

@@ -39,6 +39,7 @@ PKGDIR  := packages
 HTMLDIR := html
 CHANNEL_CONFIG := "(progn\
   (setq package-build-stable nil)\
+  (setq package-build-all-publishable t)\
   (setq package-build-snapshot-version-functions\
         '(package-build-timestamp-version))\
   (setq package-build-badge-data '(\"melpa\" \"\#922793\")))"
@@ -48,9 +49,13 @@ PKGDIR  := packages-stable
 HTMLDIR := html-stable
 CHANNEL_CONFIG := "(progn\
   (setq package-build-stable t)\
+  (setq package-build-all-publishable nil)\
   (setq package-build-release-version-functions\
         '(package-build-tag-version))\
   (setq package-build-badge-data '(\"melpa stable\" \"\#3e999f\")))"
+
+else
+$(error Unknown MELPA_CHANNEL: $(MELPA_CHANNEL))
 endif
 
 # You probably don't want to change this.
@@ -73,10 +78,12 @@ $(addprefix -L ,$(LOAD_PATH)) \
 
 TIMEOUT := $(shell which timeout && echo "-k 60 600")
 
-.PHONY: clean build json html sandbox
+.PHONY: clean build summarise json html sandbox
 .FORCE:
 
-all: build archive-contents json html
+all: build summarise
+
+summarise: archive-contents json html
 
 ## Build
 
@@ -85,9 +92,7 @@ build: $(RCPDIR)/*
 $(RCPDIR)/%: .FORCE
 	@echo " • Building package $(@F) ..."
 	@exec 2>&1; exec &> >(tee $(PKGDIR)/$(@F).log); \
-	  $(TIMEOUT) $(EVAL) "(package-build-archive \"$(@F)\")" \
-	  && echo " ✓ Success:" \
-	  && ls -lsh $(PKGDIR)/$(@F)-[0-9]*
+	  $(TIMEOUT) $(EVAL) "(package-build-archive \"$(@F)\")"
 	@test $(SLEEP) -gt 0 && echo " Sleeping $(SLEEP) seconds ..." \
 	  && sleep $(SLEEP) || true
 	@echo
@@ -144,6 +149,11 @@ pull-package-build:
 	git -c "commit.gpgSign=true" subtree merge \
 	-m "Merge Package-Build $$(git describe FETCH_HEAD)" \
 	--squash -P package-build FETCH_HEAD
+
+## Docker support
+
+get-pkgdir: .FORCE
+	@echo $(PKGDIR)
 
 ## Sandbox
 
